@@ -17,7 +17,6 @@ let io = require('socket.io');
 io = new io.Server(server);
 
 io.on('connection', (socket) => {
-    console.log(socket.id);
     console.log('A new client connected with the id:' + socket.id);
 
      //STEP 6. listen for data coming in
@@ -27,11 +26,11 @@ io.on('connection', (socket) => {
         //step 7. send to all clients, including us
         io.emit ('data', data);
 
-        // //send to all client, excpet us
-        // socket.broadcast.emit('data', data);
-
-        // //send to us only
-        // socket.emit ('data', data);
      })
+
+     //Listen for this client to disconnect
+    socket.on('disconnect', function() {
+        console.log("A client has disconnected: " + socket.id);
+    });
 
 });
