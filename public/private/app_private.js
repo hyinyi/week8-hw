@@ -1,32 +1,31 @@
 //Step 4. SOCKET connection
-let socket = io();
+let socket = io('/private');
 
 
-  //connect socket client
+//Prompt users to enter the room name
+window.addEventListener('load', ()=>{
+    let roomName = window.prompt('Enter room key: ');
+  
+    let roomObj = {
+      room: roomName
+    }
+  
+    socket.emit('room-name', roomObj);
+  });
+
+
+//connect socket client
 socket.on('connect',()=>{
     console.log('Connected');
 });
 
 
 //p5 code
-let emo =['🌟','❤️','🫶','🍻']
-let sounds = [];
-
-// function preload() {
-//     sound = loadSound("assets/wow.mp3");
-//   }
-    
-function preload() {
-	sounds.push(loadSound("assets/wow.mp3"));
-	sounds.push(loadSound("assets/nice.mp3"));
-    sounds.push(loadSound("assets/cheer.mp3"));
-}
-
-
+let emo =['❤️']
 
 function setup() {
     createCanvas(window.innerWidth, window.innerHeight);
-    background(100); 
+    background(0); 
     textSize(50);
 
     //Step 8. listen for data forom the server 
@@ -40,14 +39,11 @@ function setup() {
 function mousePressed(){
     let a = random(emo);
    
-
-
     let mousePos = {
         a: a,
         x: mouseX,
         y: mouseY,
     }
-
 
     //step 5. EMIT DATA to the server
     socket.emit('data', mousePos);
@@ -55,7 +51,6 @@ function mousePressed(){
 
 function emoji(obj){
     text(obj.a, obj.x, obj.y);
-    random(sounds).play();
 
 
 }
